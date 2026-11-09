@@ -1,0 +1,23 @@
+# HashiCorp Vault (project `vault`), HTTP variant: single node, Raft storage, plain
+# HTTP on :8004 inside the `vault` network. Nothing is published to the host —
+# operate it with `docker exec` and the scripts in scripts/ (see README.md).
+# For HTTPS use docker-compose.tls.yaml instead.
+services:
+
+  vault: # 8004
+    container_name: vault
+    image: hashicorp/vault:1.21
+    cap_add: ["IPC_LOCK"]
+    user: "100:100"
+    environment:
+      SKIP_SETCAP: "true"
+    command: ["server"]
+    volumes:
+      - ./config/http.json:/vault/config/vault.json:ro
+      - ./data:/vault/data
+    restart: unless-stopped
+    networks:
+      - vault
+
+networks:
+  vault:

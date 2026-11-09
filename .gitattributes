@@ -1,0 +1,5 @@
+# Everything is LF in the repo and on checkout: the scripts run inside the
+# Linux Vault container, and a CRLF shell script breaks there.
+* text=auto eol=lf
+*.sh text eol=lf
+*.db binary

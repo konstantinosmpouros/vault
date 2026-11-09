@@ -1,0 +1,20 @@
+{
+    "ui": true,
+    "log_level": "info",
+    "disable_mlock": true,
+    "storage": { "raft": { "path": "/vault/data", "node_id": "vault-node-1" } },
+    "listener": [
+        {
+            "tcp": {
+                "address": "0.0.0.0:8004",
+                "cluster_address": "0.0.0.0:8005",
+                "tls_disable": false,
+                "tls_cert_file": "/vault/tls/tls.crt",
+                "tls_key_file": "/vault/tls/tls.key",
+                "tls_client_ca_file": "/vault/tls/ca.crt"
+            }
+        }
+    ],
+    "api_addr": "https://vault:8004",
+    "cluster_addr": "https://vault:8005"
+}

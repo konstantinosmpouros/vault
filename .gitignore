@@ -1,0 +1,20 @@
+# Raft storage = the live Vault database (unseal keys protect it, but never share it).
+data/
+# Generated certs and keys for the TLS variant of the scripts.
+tls/
+*.pem
+*.key
+*.crt
+# Local env / credentials.
+.env
+*.env
+!*.example.env
+
+# Editors / OS.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local agent instructions/runbook — kept out of the public repo.
+CLAUDE.md

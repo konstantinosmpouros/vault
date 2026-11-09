@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: ShellCheck (POSIX sh)
+        run: shellcheck -s sh scripts/*.sh scripts_tls/*.sh
+
+      - name: Validate compose and server config
+        run: |
+          docker compose config -q
+          docker compose -f docker-compose.tls.yaml config -q
+          for f in config/*.json; do python3 -m json.tool "$f" > /dev/null; done
+
+      - name: No CRLF line endings
+        run: |
+          if git grep -lI "$(printf '\r')" -- .; then
+            echo "CRLF found in the files above" >&2
+            exit 1
+          fi
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

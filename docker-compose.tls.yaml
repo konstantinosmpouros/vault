@@ -1,0 +1,28 @@
+# HashiCorp Vault (project `vault`), TLS variant: single node, Raft storage, HTTPS
+# on :8004 inside the `vault` network. Nothing is published to the host — operate
+# it with `docker exec` and the scripts in scripts_tls/ (see README.md).
+#
+# Needs ./tls/{ca.crt,tls.crt,tls.key} first: sh scripts_tls/gen_tls_certs.sh
+#   docker compose -f docker-compose.tls.yaml up -d
+services:
+
+  vault: # 8004
+    container_name: vault
+    image: hashicorp/vault:1.21
+    cap_add: ["IPC_LOCK"]
+    user: "100:100"
+    environment:
+      SKIP_SETCAP: "true"
+    command: ["server"]
+    volumes:
+      - ./config/tls.json:/vault/config/vault.json:ro
+      - ./data:/vault/data
+      - ./tls/tls.key:/vault/tls/tls.key:ro
+      - ./tls/tls.crt:/vault/tls/tls.crt:ro
+      - ./tls/ca.crt:/vault/tls/ca.crt:ro
+    restart: unless-stopped
+    networks:
+      - vault
+
+networks:
+  vault:
