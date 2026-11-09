@@ -8,7 +8,7 @@ services:
 
   vault: # 8004
     container_name: vault
-    image: hashicorp/vault:1.21
+    image: hashicorp/vault:2.2
     cap_add: ["IPC_LOCK"]
     user: "100:100"
     environment:
